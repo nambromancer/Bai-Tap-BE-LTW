@@ -1,0 +1,61 @@
+﻿@model _18DH110115_LTW.Models.Product
+
+@* Model sẽ được truyền giữa Partial View và trang cha *@
+
+<head>
+    <style>
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            border: 3px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            font-size: 16px;
+            resize: none;
+        }
+    </style>
+</head>
+
+@* Phần dùng chung cho 2 form Edit.cshtml và Create.cshtml *@
+<div class="form-group">
+    <div class="control-label col-md-2">Danh mục</div>
+    <div class="col-md-10">
+        @Html.DropDownList("CategoryID", null, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="control-label col-md-2">Tên sản phẩm</div>
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="control-label col-md-2">Mô tả</div>
+    <div class="col-md-10">
+        @Html.TextAreaFor(model => model.ProductDescription)
+        @Html.ValidationMessageFor(model => model.ProductDescription, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="control-label col-md-2">Đơn giá</div>
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.ProductPrice, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ProductPrice, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+@* Không preview ảnh trước khi upload *@
+<div class="form-group">
+    <div class="control-label col-md-2">Hình ảnh</div>
+    <div class="col-md-10">
+        @Html.TextBoxFor(model => model.UploadImg, new { @class = "form-control", placeholder = "https://example.com/image.jpg" })
+        @Html.ValidationMessageFor(model => model.UploadImg, "", new { @class = "text-danger" })
+    </div>
+</div>

@@ -1,0 +1,106 @@
+﻿
+@model _18DH110115_LTW.Models.ViewModel.SearchProductVM
+@using PagedList.Mvc
+
+<head>
+    <style>
+        .product-thumb {
+            height: 150px;
+            max-width: 150px;
+        }
+        .pagination-buttons.pagination {
+            display: inline-flex;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 8px 0;
+            padding-left: 0;
+        }
+
+        .pagination > li {
+            list-style: none;
+        }
+
+            .pagination > li > a, .pagination > li > span {
+                display: block;
+                padding: 6px 12px;
+                border-right: 1px solid #d0d7de;
+                color: #0969da;
+                text-decoration: none;
+                background: #fff;
+            }
+
+            .pagination > li:last-child > a, .pagination > li:last-child > span {
+                border-right: none;
+            }
+
+        .pagination > .active > a, .pagination > .active > span {
+            background: #2b7dbc; /* blue */
+            color: #fff;
+            border-color: #2b7dbc;
+        }
+
+        .pagination > .disabled > span, .pagination > .disabled > a {
+            color: #8c959f;
+            pointer-events: none;
+            background: #f6f8fa;
+        }
+    </style>
+</head>
+
+@if (Model.Products != null && Model.Products.Any())
+{
+    <h2 class="bg-success">DANH SÁCH SẢN PHẨM</h2>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="bg-success col-md-2">Hình ảnh</th>
+                <th class="bg-success col-md-3">Tên sản phẩm</th>
+                <th class="bg-success col-md-2">Đơn giá</th>
+                <th class="bg-success col-md-3">Danh mục</th>
+                <th class="bg-success col-md-2">Chức năng</th>
+            </tr>
+        </thead>
+       
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>
+                        @{
+                            var imgSrc = string.IsNullOrWhiteSpace(product.ProductImage)
+                                ? Url.Content("~/Content/Images/no-image.png")
+                                : Url.Content(product.ProductImage);
+                        }
+                        <img src="@imgSrc" alt="@product.ProductName" class="product-thumb img-thumbnail" />
+                    </td>
+                    <td>@Html.DisplayFor(_ => product.ProductName)</td>
+                    <td>@String.Format("{0:N0}", product.ProductPrice)</td>
+                    <td>@Html.DisplayFor(_ => product.Category.CategoryName)</td>
+                    <td>
+                        @Html.ActionLink("Cập nhật", "Edit", new { id = product.ProductID }, new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Chi tiết", "Details", new { id = product.ProductID }, new { @class = "btn btn-primary btn-sm mx-1" })
+                        @Html.ActionLink("Xóa", "Delete", new { id = product.ProductID }, new { @class = "btn btn-primary btn-sm" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+       
+    </table>
+
+    <div class="pagination-container">
+        @Html.PagedListPager(Model.Products, page => Url.Action("Index", new { page, searchTerm = Model.SearchTerm,
+        minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, sortOrder = Model.SortOrder}))
+    </div>
+}
+else
+            {
+                <p>Không tìm được sản phẩm nào phù hợp</p>
+            }
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+    </div>
+</div>
