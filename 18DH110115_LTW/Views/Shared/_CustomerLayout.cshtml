@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - FASTOR</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="@Url.Content("~/Content/CustomerLayout.css")">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top banner -->
+    <div class="top-banner">
+        Free ship đơn từ 40k, giảm nhiều hơn cùng <strong>FREESHIP XTRA</strong>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="@Url.Action("Index", "Home")" class="logo">FASTOR</a>
+
+            <!-- Category Menu - will be populated by partial view -->
+            @*@Html.Partial("_CategoriesPV")*@
+
+            <!-- User Menu -->
+            <div class="user-menu">
+                <a href="@Url.Action("Index", "Home")">
+                    <i class="fas fa-home"></i> Trang chủ
+                </a>
+                <a href="@Url.Action("Login", "Account")">
+                    <i class="fas fa-user"></i> Tài khoản
+                </a>
+                <a href="@Url.Action("Index", "Cart")">
+                    <i class="fas fa-shopping-cart"></i> Giỏ hàng
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                © @DateTime.Now.Year - Tên ứng dụng
+            </div>
+            <div class="footer-right">
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

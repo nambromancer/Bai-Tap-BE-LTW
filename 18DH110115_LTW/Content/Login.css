@@ -1,0 +1,77 @@
+﻿.login-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}
+
+.login-container {
+    margin-left: 140px;
+}
+
+    .login-container h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+        font-weight: normal;
+        margin-left: 0;
+    }
+
+    .login-container .form-group {
+        margin-bottom: 12px;
+        position: relative;
+    }
+
+    .login-container label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: normal;
+        text-align: right;
+        width: 120px;
+        position: absolute;
+        left: -130px;
+        top: 5px;
+    }
+
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+        width: 280px;
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+        display: block;
+    }
+
+    .login-container .btn {
+        width: 280px;
+        padding: 8px;
+        background-color: #5bc0de;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        display: block;
+        margin-top: 15px;
+    }
+
+        .login-container .btn:hover {
+            background-color: #46b8da;
+        }
+
+    .login-container .register-link {
+        margin-top: 10px;
+        width: 280px;
+        white-space: nowrap;
+    }
+
+    .login-container .text-danger {
+        display: block;
+        font-size: 12px;
+        color: #d9534f;
+        margin-top: 3px;
+        width: 280px;
+    }
+
+    .login-container .validation-summary-errors {
+        color: #d9534f;
+        margin-bottom: 15px;
+    }

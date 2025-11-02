@@ -1,0 +1,83 @@
+﻿@model _18DH110115_LTW.Models.ViewModel.RegisterVM
+
+@{
+    ViewBag.Title = "ĐĂNG KÝ TÀI KHOẢN";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<link rel="stylesheet" href="@Url.Content("~/Content/Register.css")">
+
+<div class="register-wrapper">
+    <div class="register-container">
+        <h2>Đăng ký tài khoản</h2>
+
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @* Tên đăng nhập *@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username)
+                    @Html.TextBoxFor(model => model.Username)
+                </div>
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+
+                @* Mật khẩu *@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Password)
+                    @Html.PasswordFor(model => model.Password)
+                </div>
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+                @* Xác nhận mật khẩu *@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ConfirmPassword)
+                    @Html.PasswordFor(model => model.ConfirmPassword)
+                </div>
+                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+
+                @* Họ tên khách hàng *@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CustomerName)
+                    @Html.TextBoxFor(model => model.CustomerName)
+                </div>
+                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+
+                @* SĐT Khách hàng *@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CustomerPhone)
+                    @Html.TextBoxFor(model => model.CustomerPhone)
+                </div>
+                @Html.ValidationMessageFor(model => model.CustomerPhone, "", new { @class = "text-danger" })
+
+                @* Email khách hàng *@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CustomerEmail)
+                    @Html.TextBoxFor(model => model.CustomerEmail, new { type = "email" })
+                </div>
+                @Html.ValidationMessageFor(model => model.CustomerEmail, "", new { @class = "text-danger" })
+
+                @* Địa chỉ khách hàng *@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CustomerAddress)
+                    @Html.TextBoxFor(model => model.CustomerAddress)
+                </div>
+                @Html.ValidationMessageFor(model => model.CustomerAddress, "", new { @class = "text-danger" })
+
+                <div style="margin-top: 15px;">
+                    <button type="submit" class="btn">Đăng ký</button>
+                </div>
+
+                <div class="login-link">
+                    Bạn Đã Có Tài Khoản? @Html.ActionLink("Đăng nhập", "Login", "Account")
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

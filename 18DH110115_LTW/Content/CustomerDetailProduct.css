@@ -1,0 +1,63 @@
+﻿/* Product Detail page (center + left image + right sidebar) */
+.pro {
+    padding: 16px 12px 32px;
+    background: #f6f8fb;
+}
+.pro > .row {
+    max-width: 1140px;     /* adjust to taste: 1024/1140/1280 */
+    margin: 0 auto;        /* center the frame */
+}
+
+/* Card look for sections */
+.pro-section {
+    background: #fff;
+    border: 1px solid #e6e9ef;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+/* Main product image */
+.pro-section img {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    height: 260px;
+    object-fit: contain;
+    margin: 0 auto;
+    border-radius: 6px;
+    background: #fff;
+}
+
+/* Title, price, sold */
+.pro-price {
+    font-weight: 700;
+    font-size: 18px;
+    color: #e53935;
+    margin: 6px 0 8px;
+}
+.pro-sale {
+    font-weight: 500;
+    color: #6b7280;
+    margin: 0 0 6px;
+}
+
+/* Right column controls */
+.pro .form-group h4 { margin: 8px 0 6px; }
+.pro .form-group input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #cfd5e1;
+    border-radius: 6px;
+}
+.pro .btn.btn-info {
+    width: 100%;
+    background: #2a7bd6;
+    border-color: #2a7bd6;
+    font-weight: 600;
+}
+.pro .btn.btn-info:hover {
+    background: #1f67b6;
+    border-color: #1f67b6;
+}
