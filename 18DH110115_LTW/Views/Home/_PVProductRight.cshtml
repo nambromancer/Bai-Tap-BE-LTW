@@ -1,0 +1,36 @@
+﻿@model _18DH110115_LTW.Models.ViewModel.ProductDetailsVM
+
+<div class="pro-section">
+    <div class="form-group">
+        @*Phần tạm tính*@
+        @using (Html.BeginForm(
+                    "ProductDetails",
+                    "Home",
+                    new { id = Model.product.ProductID, page = Model.PageNumber },
+                    FormMethod.Get,
+                    new { id = "qtyForm" }))
+        {
+            @Html.Hidden("id", Model.product.ProductID)
+            @Html.Hidden("page", Model.PageNumber)
+
+            <h4><strong>Số lượng</strong></h4>
+            <p>
+                @Html.TextBoxFor(model => model.quantity, new { @class = "form-control js-qty", @type = "number", @min = 1 })
+            </p>
+
+            <h4><strong>Tạm tính</strong></h4>
+            <p class="pro-price">@Model.estimatedValue.ToString("N0")</p>
+
+            <p>
+                @Html.ActionLink("Thêm vào giỏ hàng", "AddToCart", "Cart",
+                            new { id = Model.product.ProductID, quantity = Model.quantity },
+                            new { @class = "btn btn-info" })
+            </p>
+        }
+    </div>
+</div>
+
+<div class="pro-section">
+    <!-- Khối TopProduct -->
+    <div>@Html.Partial("_PVTopProduct", Model)</div>
+</div>

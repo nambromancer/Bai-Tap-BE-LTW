@@ -24,11 +24,12 @@
     </section>
 
     <div class="pagination-container">
-        @Html.PagedListPager(Model.TopProducts, page => Url.Action("ProductDetails", new
-        {
-            id = Model.product.ProductID,
-            quantity = Model.quantity,
-            page
-        }))
+        @Html.PagedListPager(
+            Model.TopProducts,
+            page => Url.Action("ProductDetails", new { id = Model.product.ProductID, quantity = Model.quantity, page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
+                new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "pro-right", InsertionMode = InsertionMode.Replace }
+            )
+        )
     </div>
 }

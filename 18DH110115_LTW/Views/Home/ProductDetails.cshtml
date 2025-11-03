@@ -31,32 +31,40 @@
         </div>
         <!-- khối bên phải -->
         <div class="col-md-3">
-            <div class="pro-section">
-                <div class="form-group">
-                    @*Phần tạm tính*@
-                    @using (Html.BeginForm("ProductDetails", "Home", new { id = Model.product.ProductID, page = Model.PageNumber }, FormMethod.Get))
-                    {
-                        <h4><strong>Số lượng</strong></h4>
-                        <p>
-                            @Html.TextBoxFor(model => model.quantity, new { @class = "form-control", @type = "number", @min = 1, oninput = "this.form.submit()" })
-                        </p>
-
-                        <h4><strong>Tạm tính</strong></h4>
-                        <p class="pro-price">@Model.estimatedValue.ToString("N0")</p>
-
-                        <p>
-                            @Html.ActionLink("Thêm vào giỏ hàng", "AddToCart", "Cart",
-                                        new { id = Model.product.ProductID, quantity = Model.quantity },
-                                        new { @class = "btn btn-info" })
-                        </p>
-                    }
-                </div>
-            </div>
-
-            <div class="pro-section">
-                <!-- Khối TopProduct -->
-                <div>@Html.Partial("_PVTopProduct", Model)</div>
+            <div id="pro-right">
+                @Html.Partial("_PVProductRight", Model)
             </div>
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        (function () {
+            // Auto update subtotal via AJAX whenever quantity changes (works after DOM replacement)
+            $(document).on('input', '#pro-right .js-qty', function (e) {
+                e.preventDefault();
+                var $form = $(this).closest('form');
+                $.get($form.attr('action'), $form.serialize(), function (html) {
+                    $('#pro-right').html(html);
+                });
+            });
+
+            // Prevent Enter from causing full-page navigation on qty
+            $(document).on('keydown', '#pro-right .js-qty', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                }
+            });
+
+            // Ensure TopProducts pager loads via AJAX (no jump-to-top)
+            $(document).on('click', '#pro-right .pagination a', function (e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                $.get(url, function (html) {
+                    $('#pro-right').html(html);
+                });
+            });
+        })();
+    </script>
+}

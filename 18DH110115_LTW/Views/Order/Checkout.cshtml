@@ -1,0 +1,134 @@
+﻿@model _18DH110115_LTW.Models.ViewModel.CheckoutVM
+
+@{
+    ViewBag.Title = "Đặt hàng";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Content/CustomerCheckout.css")">
+
+<div class="checkout-container">
+    <div class="checkout-header">
+        <h2><i class="fas fa-shopping-bag"></i> ĐẶT HÀNG</h2>
+        <p>Vui lòng kiểm tra thông tin đơn hàng trước khi xác nhận</p>
+    </div>
+
+    @using (Html.BeginForm("Checkout", "Order", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <!-- Thông tin đơn hàng -->
+        <h3 class="section-title"><i class="fas fa-box"></i> Thông tin đơn hàng</h3>
+
+        <table class="checkout-table">
+            <thead>
+                <tr>
+                    <th>Hình ảnh</th>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>
+                            <img src="@Url.Content(item.ProductImage)" alt="@item.ProductName" class="product-image" />
+                        </td>
+                        <td class="product-name">@item.ProductName</td>
+                        <td>@item.Quantity</td>
+                        <td class="price">@item.UnitPrice.ToString("N0") đ</td>
+                        <td class="price">@item.TotalPrice.ToString("N0") đ</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Thông tin giao hàng -->
+        <h3 class="section-title"><i class="fas fa-truck"></i> Thông tin giao hàng</h3>
+
+        <div class="checkout-form-group">
+            @Html.LabelFor(m => m.ShippingAddress, new { @class = "checkout-label" })
+            @Html.TextBoxFor(m => m.ShippingAddress, new { @class = "checkout-input", @readonly = "readonly", @id = "shippingAddress" })
+            @Html.ValidationMessageFor(m => m.ShippingAddress, "", new { @class = "field-validation-error" })
+            <a href="javascript:void(0)" class="btn-link-custom" onclick="enableAddressEdit()">
+                <i class="fas fa-edit"></i> Chọn địa chỉ khác
+            </a>
+        </div>
+
+        <div id="newAddressGroup" class="checkout-form-group hidden-group">
+            <label class="checkout-label">Địa chỉ mới</label>
+            <input type="text" id="newShippingAddress" class="checkout-input" placeholder="Nhập địa chỉ giao hàng mới" />
+        </div>
+
+        <div class="checkout-form-group">
+            <label class="checkout-label"><i class="fas fa-shipping-fast"></i> Phương thức giao hàng</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    @Html.RadioButtonFor(m => m.ShippingMethod, "Giao hàng nhanh", new { @id = "ship1" })
+                    <label for="ship1">Giao hàng nhanh (1-2 ngày)</label>
+                </div>
+                <div class="radio-option">
+                    @Html.RadioButtonFor(m => m.ShippingMethod, "Giao hàng COD", new { @id = "ship2" })
+                    <label for="ship2">Giao hàng COD - Kiểm tra hàng trước khi nhận</label>
+                </div>
+            </div>
+            @Html.ValidationMessageFor(m => m.ShippingMethod, "", new { @class = "field-validation-error" })
+        </div>
+
+        <div class="checkout-form-group">
+            <label class="checkout-label"><i class="fas fa-credit-card"></i> Phương thức thanh toán</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    @Html.RadioButtonFor(m => m.PaymentMethod, "Tiền mặt", new { @id = "pay1" })
+                    <label for="pay1">Thanh toán khi nhận hàng (COD)</label>
+                </div>
+                <div class="radio-option">
+                    @Html.RadioButtonFor(m => m.PaymentMethod, "Paypal", new { @id = "pay2" })
+                    <label for="pay2">Thanh toán qua PayPal</label>
+                </div>
+                <div class="radio-option">
+                    @Html.RadioButtonFor(m => m.PaymentMethod, "Mua trước trả sau", new { @id = "pay3" })
+                    <label for="pay3">Mua trước trả sau</label>
+                </div>
+            </div>
+            @Html.ValidationMessageFor(m => m.PaymentMethod, "", new { @class = "field-validation-error" })
+        </div>
+
+        <!-- Tổng tiền -->
+        <div class="total-section">
+            <div class="total-label">Tổng thanh toán:</div>
+            <div class="total-amount">@Model.TotalAmount.ToString("N0") đ</div>
+            @Html.HiddenFor(m => m.TotalAmount)
+        </div>
+
+        <!-- Nút đặt hàng -->
+        <div class="form-actions">
+            <button type="submit" class="btn-submit" onclick="updateShippingAddress()">
+                <i class="fas fa-check-circle"></i> XÁC NHẬN ĐẶT HÀNG
+            </button>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function enableAddressEdit() {
+            document.getElementById("shippingAddress").removeAttribute("readonly");
+            document.getElementById("shippingAddress").classList.remove("checkout-input");
+            document.getElementById("shippingAddress").classList.add("checkout-input");
+            document.getElementById("newAddressGroup").style.display = "block";
+            document.getElementById("newAddressGroup").classList.remove("hidden-group");
+        }
+
+        function updateShippingAddress() {
+            var newAddress = document.getElementById("newShippingAddress").value;
+            if (newAddress) {
+                document.getElementById("shippingAddress").value = newAddress;
+            }
+        }
+    </script>
+}

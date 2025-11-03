@@ -1,10 +1,8 @@
 ﻿using _18DH110115_LTW.Models;
 using _18DH110115_LTW.Models.ViewModel;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -27,34 +25,58 @@ namespace _18DH110115_LTW.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Kiểm tra xem tên đăng nhập đã tồn tại chưa
-                var existingUser = db.Users.SingleOrDefault(u => u.Username == model.Username);
-                if (existingUser != null)
+                try
                 {
-                    ModelState.AddModelError("Username", "Tên đăng nhập này đã tồn tại!");
-                    return View(model);
+                    var existingUser = db.Users.SingleOrDefault(u => u.Username == model.Username);
+                    if (existingUser != null)
+                    {
+                        ModelState.AddModelError("Username", "Tên đăng nhập này đã tồn tại!");
+                        return View(model);
+                    }
+
+                    var user = new User
+                    {
+                        Username = model.Username,
+                        Password = model.Password,
+                        UserRole = "Customer"
+                    };
+                    db.Users.Add(user);
+
+                    var customer = new Customer
+                    {
+                        CustomerName = model.CustomerName,
+                        CustomerEmail = model.CustomerEmail,
+                        CustomerPhone = model.CustomerPhone,
+                        CustomerAddress = model.CustomerAddress,
+                        Username = model.Username
+                    };
+                    db.Customers.Add(customer);
+
+                    db.SaveChanges();
+
+                    // Lưu thông tin vào Session và Cookie
+                    Session["Username"] = user.Username;
+                    Session["UserRole"] = user.UserRole;
+                    Session["CustomerName"] = customer.CustomerName;
+                    FormsAuthentication.SetAuthCookie(user.Username, false);
+
+                    return RedirectToAction("Index", "Home");
                 }
-                //Nếu chưa tồn tại thì tạo bản ghi thông tin tài khoản trong bảng User
-                var user = new User
+                catch (DbEntityValidationException ex)
                 {
-                    Username = model.Username,
-                    Password = model.Password, // Lưu ý: Nên mã hóa mật khẩu trước khi lưu
-                    UserRole = "Customer"
-                };
-                db.Users.Add(user);
-                // và tạo bản ghi thông tin khách hàng trong bảng Customer
-                var customer = new Customer
+                    foreach (var validationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            ModelState.AddModelError(validationError.PropertyName,
+                                $"{validationError.PropertyName}: {validationError.ErrorMessage}");
+                        }
+                    }
+                }
+                catch (Exception ex)
                 {
-                    CustomerName = model.CustomerName,
-                    CustomerEmail = model.CustomerEmail,
-                    CustomerPhone = model.CustomerPhone,
-                    CustomerAddress = model.CustomerAddress,
-                    Username = model.Username
-                };
-                db.Customers.Add(customer);
-                //Lưu thông tin tài khoản và thông tin khách hàng vào CSDL
-                db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                    ModelState.AddModelError("", $"Lỗi khi đăng ký: {ex.Message}");
+                }
             }
 
             return View(model);
@@ -73,27 +95,43 @@ namespace _18DH110115_LTW.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = db.Users.SingleOrDefault(u => u.Username == model.Username
-                                                      && u.Password == model.Password
-                                                      && u.UserRole == "Customer");
-                if (user != null)
+                try
                 {
-                    // Lưu trạng thái đăng nhập vào session
-                    Session["Username"] = user.Username;
-                    Session["UserRole"] = user.UserRole;
+                    var user = db.Users.SingleOrDefault(u => u.Username == model.Username
+                                                          && u.Password == model.Password
+                                                          && u.UserRole == "Customer");
+                    if (user != null)
+                    {
+                        var customer = db.Customers.SingleOrDefault(c => c.Username == user.Username);
 
-                    //lưu thông tin xác thực người dùng vào cookie
-                    FormsAuthentication.SetAuthCookie(user.Username, false);
+                        // Lưu thông tin vào Session và Cookie
+                        Session["Username"] = user.Username;
+                        Session["UserRole"] = user.UserRole;
+                        Session["CustomerName"] = customer?.CustomerName;
+                        FormsAuthentication.SetAuthCookie(user.Username, false);
 
-                    return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng.");
+                    ModelState.AddModelError("", $"Lỗi đăng nhập: {ex.Message}");
                 }
             }
 
             return View(model);
+        }
+
+        // GET: Account/Logout
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

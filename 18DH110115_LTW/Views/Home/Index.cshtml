@@ -26,6 +26,24 @@
         </section>
 
         @Html.Partial("_PVFeatureProduct", Model)
-        @Html.Partial("_PVNewProduct", Model)
+
+        <div id="new-products-container">
+            @Html.Partial("_PVNewProduct", Model)
+        </div>
     </div>
 </div>
+
+@section scripts {
+    <script>$(document).ready(function () {
+            // AJAX pagination cho sản phẩm mới
+            $(document).on('click', '#new-products-container .pagination a', function (e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                $.get(url, function (data) {
+                    // Lấy phần _PVNewProduct từ response
+                    var newProductsHtml = $(data).find('#new-products-container').html();
+                    $('#new-products-container').html(newProductsHtml);
+                });
+            });
+        });</script>
+}

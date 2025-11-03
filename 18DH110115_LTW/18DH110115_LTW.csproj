@@ -140,7 +140,9 @@
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -177,6 +179,10 @@
     <Compile Include="Models\User.cs">
       <DependentUpon>MyStoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\Cart.cs" />
+    <Compile Include="Models\ViewModel\CartItem.cs" />
+    <Compile Include="Models\ViewModel\CartService.cs" />
+    <Compile Include="Models\ViewModel\CheckoutVM.cs" />
     <Compile Include="Models\ViewModel\HomeProductVM.cs" />
     <Compile Include="Models\ViewModel\LoginVM.cs" />
     <Compile Include="Models\ViewModel\ProductDetailsVM.cs" />
@@ -201,10 +207,13 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\CustomerCart.css" />
+    <Content Include="Content\CustomerCheckout.css" />
     <Content Include="Content\CustomerDetailProduct.css" />
     <Content Include="Content\CustomerHome.css" />
     <Content Include="Content\CustomerLayout.css" />
     <Content Include="Content\Login.css" />
+    <Content Include="Content\OrderSuccess.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Register.css" />
     <Content Include="favicon.ico" />
@@ -256,6 +265,8 @@
     <Content Include="Scripts\jquery-3.7.0.slim.js" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -280,6 +291,11 @@
     <Content Include="Views\Home\ProductDetails.cshtml" />
     <Content Include="Views\Home\_PVTopProduct.cshtml" />
     <Content Include="Views\Home\_PVRelatedProduct.cshtml" />
+    <Content Include="Views\Home\_PVProductRight.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
+    <Content Include="Views\Cart\_PVSimilarProduct.cshtml" />
+    <Content Include="Views\Order\Checkout.cshtml" />
+    <Content Include="Views\Order\OrderSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
